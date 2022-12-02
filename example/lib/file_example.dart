@@ -1,24 +1,19 @@
 import 'dart:io';
 
 import 'package:catcher/catcher.dart';
+import 'package:catcher/mode/dialog_report_mode.dart';
+import 'package:catcher/model/catcher_options.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   var catcher = Catcher(rootWidget: MyApp(), ensureInitialized: true);
-  Directory? externalDir;
-  if (Platform.isAndroid || Platform.isIOS) {
-    externalDir = await getExternalStorageDirectory();
-  }
-  if (Platform.isMacOS) {
-    externalDir = await getApplicationDocumentsDirectory();
-  }
+  Directory? externalDir = await getExternalStorageDirectory();
   String path = "";
   if (externalDir != null) {
     path = externalDir.path.toString() + "/log.txt";
   }
-  print("PATH: " + path);
 
   CatcherOptions debugOptions = CatcherOptions(
       DialogReportMode(), [FileHandler(File(path), printLogs: true)]);

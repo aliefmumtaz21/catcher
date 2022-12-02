@@ -1,95 +1,80 @@
 import 'package:catcher/model/platform_type.dart';
 import 'package:catcher/model/report.dart';
 import 'package:catcher/model/report_handler.dart';
-import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class ConsoleHandler extends ReportHandler {
   final bool enableDeviceParameters;
   final bool enableApplicationParameters;
   final bool enableStackTrace;
   final bool enableCustomParameters;
-  final bool handleWhenRejected;
+  final Logger _logger = Logger("ConsoleHandler");
 
   ConsoleHandler({
     this.enableDeviceParameters = true,
     this.enableApplicationParameters = true,
     this.enableStackTrace = true,
     this.enableCustomParameters = false,
-    this.handleWhenRejected = false,
   });
 
   @override
-  Future<bool> handle(Report report, BuildContext? context) {
-    logger.info(
-      "============================== CATCHER LOG ==============================",
-    );
-    logger.info("Crash occurred on ${report.dateTime}");
-    logger.info("");
+  Future<bool> handle(Report report) {
+    _logger.info(
+        "============================== CATCHER LOG ==============================");
+    _logger.info("Crash occured on ${report.dateTime}");
+    _logger.info("");
     if (enableDeviceParameters) {
       _printDeviceParametersFormatted(report.deviceParameters);
-      logger.info("");
+      _logger.info("");
     }
     if (enableApplicationParameters) {
       _printApplicationParametersFormatted(report.applicationParameters);
-      logger.info("");
+      _logger.info("");
     }
-    logger.info("---------- ERROR ----------");
-    logger.info("${report.error}");
-    logger.info("");
+    _logger.info("---------- ERROR ----------");
+    _logger.info("${report.error}");
+    _logger.info("");
     if (enableStackTrace) {
       _printStackTraceFormatted(report.stackTrace as StackTrace?);
     }
     if (enableCustomParameters) {
       _printCustomParametersFormatted(report.customParameters);
     }
-    logger.info(
-      "======================================================================",
-    );
+    _logger.info(
+        "======================================================================");
     return Future.value(true);
   }
 
   void _printDeviceParametersFormatted(Map<String, dynamic> deviceParameters) {
-    logger.info("------- DEVICE INFO -------");
+    _logger.info("------- DEVICE INFO -------");
     for (final entry in deviceParameters.entries) {
-      logger.info("${entry.key}: ${entry.value}");
+      _logger.info("${entry.key}: ${entry.value}");
     }
   }
 
   void _printApplicationParametersFormatted(
-    Map<String, dynamic> applicationParameters,
-  ) {
-    logger.info("------- APP INFO -------");
+      Map<String, dynamic> applicationParameters) {
+    _logger.info("------- APP INFO -------");
     for (final entry in applicationParameters.entries) {
-      logger.info("${entry.key}: ${entry.value}");
+      _logger.info("${entry.key}: ${entry.value}");
     }
   }
 
   void _printCustomParametersFormatted(Map<String, dynamic> customParameters) {
-    logger.info("------- CUSTOM INFO -------");
+    _logger.info("------- CUSTOM INFO -------");
     for (final entry in customParameters.entries) {
-      logger.info("${entry.key}: ${entry.value}");
+      _logger.info("${entry.key}: ${entry.value}");
     }
   }
 
   void _printStackTraceFormatted(StackTrace? stackTrace) {
-    logger.info("------- STACK TRACE -------");
+    _logger.info("------- STACK TRACE -------");
     for (final entry in stackTrace.toString().split("\n")) {
-      logger.info(entry);
+      _logger.info(entry);
     }
   }
 
   @override
-  List<PlatformType> getSupportedPlatforms() => [
-        PlatformType.android,
-        PlatformType.iOS,
-        PlatformType.web,
-        PlatformType.linux,
-        PlatformType.macOS,
-        PlatformType.windows,
-      ];
-
-  @override
-  bool shouldHandleWhenRejected() {
-    return handleWhenRejected;
-  }
+  List<PlatformType> getSupportedPlatforms() =>
+      [PlatformType.android, PlatformType.iOS, PlatformType.web];
 }

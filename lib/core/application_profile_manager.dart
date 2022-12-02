@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:catcher/model/application_profile.dart';
 import 'package:flutter/foundation.dart';
-import 'package:universal_io/io.dart';
 
 class ApplicationProfileManager {
   /// Get current application profile (release, debug or profile).
@@ -27,13 +28,4 @@ class ApplicationProfileManager {
 
   /// Check if current platform is ios
   static bool isIos() => Platform.isIOS;
-
-  ///Check if current platform is linux
-  static bool isLinux() => Platform.isLinux;
-
-  ///Check if current platform is windows
-  static bool isWindows() => Platform.isWindows;
-
-  ///Check if current platform is macOS
-  static bool isMacOS() => Platform.isMacOS;
 }

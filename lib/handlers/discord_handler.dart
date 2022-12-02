@@ -1,15 +1,13 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:catcher/model/platform_type.dart';
 import 'package:catcher/model/report.dart';
 import 'package:catcher/model/report_handler.dart';
 import 'package:catcher/utils/catcher_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class DiscordHandler extends ReportHandler {
   final Dio _dio = Dio();
+  final Logger _logger = Logger("DiscordHandler");
 
   final String webhookUrl;
 
@@ -18,7 +16,6 @@ class DiscordHandler extends ReportHandler {
   final bool enableApplicationParameters;
   final bool enableStackTrace;
   final bool enableCustomParameters;
-  final FutureOr<String> Function(Report report)? customMessageBuilder;
 
   DiscordHandler(
     this.webhookUrl, {
@@ -27,11 +24,10 @@ class DiscordHandler extends ReportHandler {
     this.enableApplicationParameters = false,
     this.enableStackTrace = false,
     this.enableCustomParameters = false,
-    this.customMessageBuilder,
   });
 
   @override
-  Future<bool> handle(Report report, BuildContext? context) async {
+  Future<bool> handle(Report report) async {
     if (report.platformType != PlatformType.web) {
       if (!(await CatcherUtils.isInternetConnectionAvailable())) {
         _printLog("No internet connection available");
@@ -39,18 +35,11 @@ class DiscordHandler extends ReportHandler {
       }
     }
 
-    String message = "";
-    if (customMessageBuilder != null) {
-      message = await customMessageBuilder!(report);
-    } else {
-      message = _buildMessage(report);
-    }
+    final String message = _setupMessage(report);
     final List<String> messages = _setupMessages(message);
 
     for (final value in messages) {
-      final bool isLastMessage = messages.indexOf(value) == messages.length - 1;
-      final bool result =
-          await _sendContent(value, isLastMessage ? report.screenshot : null);
+      final bool result = await _sendContent(value);
       if (!result) {
         return result;
       }
@@ -74,7 +63,7 @@ class DiscordHandler extends ReportHandler {
     return messages;
   }
 
-  String _buildMessage(Report report) {
+  String _setupMessage(Report report) {
     final StringBuffer stringBuffer = StringBuffer();
     stringBuffer.write("**Error:**\n${report.error}\n\n");
     if (enableStackTrace) {
@@ -107,27 +96,16 @@ class DiscordHandler extends ReportHandler {
     return stringBuffer.toString();
   }
 
-  Future<bool> _sendContent(String content, File? screenshot) async {
+  Future<bool> _sendContent(String content) async {
     try {
+      final data = {
+        "content": content,
+      };
       _printLog("Sending request to Discord server...");
-      Response? response;
-      if (screenshot != null) {
-        final screenshotPath = screenshot.path;
-        final FormData formData = FormData.fromMap(<String, dynamic>{
-          "content": content,
-          "file": await MultipartFile.fromFile(screenshotPath)
-        });
-        response = await _dio.post<dynamic>(webhookUrl, data: formData);
-      } else {
-        final data = {
-          "content": content,
-        };
-        response = await _dio.post<dynamic>(webhookUrl, data: data);
-      }
-
+      final Response response =
+          await _dio.post<dynamic>(webhookUrl, data: data);
       _printLog(
-        "Server responded with code: ${response.statusCode} and message: ${response.statusMessage}",
-      );
+          "Server responded with code: ${response.statusCode} and message: ${response.statusMessage}");
       final statusCode = response.statusCode ?? 0;
       return statusCode >= 200 && statusCode < 300;
     } catch (exception) {
@@ -138,17 +116,11 @@ class DiscordHandler extends ReportHandler {
 
   void _printLog(String log) {
     if (printLogs) {
-      logger.info(log);
+      _logger.info(log);
     }
   }
 
   @override
-  List<PlatformType> getSupportedPlatforms() => [
-        PlatformType.web,
-        PlatformType.android,
-        PlatformType.iOS,
-        PlatformType.linux,
-        PlatformType.macOS,
-        PlatformType.windows,
-      ];
+  List<PlatformType> getSupportedPlatforms() =>
+      [PlatformType.web, PlatformType.android, PlatformType.iOS];
 }

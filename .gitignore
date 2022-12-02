@@ -10,8 +10,6 @@ build/
 ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
-example/macos/Flutter/
-example/linux/flutter/
 
 *.txt
 android/.gradle
@@ -20,4 +18,7 @@ android/.gradle
 .flutter-plugins-dependencies
 flutter_export_environment.sh
 *.lock
+*.lock
 .vscode
+android/gradlew
+android/gradlew.bat

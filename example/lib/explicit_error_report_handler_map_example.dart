@@ -1,4 +1,5 @@
 import 'package:catcher/catcher.dart';
+import 'package:catcher/model/catcher_options.dart';
 import 'package:flutter/material.dart';
 
 void main() {

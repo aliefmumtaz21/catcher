@@ -1,8 +1,10 @@
 import 'package:catcher/catcher.dart';
 import 'package:catcher/model/platform_type.dart';
+import 'package:catcher/model/report_mode.dart';
 import 'package:catcher/utils/catcher_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class PageReportMode extends ReportMode {
   final bool showStackTrace;
@@ -35,12 +37,9 @@ class PageReportMode extends ReportMode {
 
   @override
   List<PlatformType> getSupportedPlatforms() => [
+        PlatformType.web,
         PlatformType.android,
         PlatformType.iOS,
-        PlatformType.web,
-        PlatformType.linux,
-        PlatformType.macOS,
-        PlatformType.windows,
       ];
 }
 
@@ -63,16 +62,10 @@ class PageWidget extends StatefulWidget {
 class PageWidgetState extends State<PageWidget> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        widget.pageReportMode.onActionRejected(widget.report);
-        return true;
-      },
-      child: Builder(
-        builder: (context) => CatcherUtils.isCupertinoAppAncestor(context)
-            ? _buildCupertinoPage()
-            : _buildMaterialPage(),
-      ),
+    return Builder(
+      builder: (context) => CatcherUtils.isCupertinoAppAncestor(context)
+          ? _buildCupertinoPage()
+          : _buildMaterialPage(),
     );
   }
 
@@ -130,17 +123,13 @@ class PageWidgetState extends State<PageWidget> {
             children: <Widget>[
               TextButton(
                 onPressed: () => _onAcceptClicked(),
-                child: Text(
-                  widget
-                      .pageReportMode.localizationOptions.pageReportModeAccept,
-                ),
+                child: Text(widget
+                    .pageReportMode.localizationOptions.pageReportModeAccept),
               ),
               TextButton(
                 onPressed: () => _onCancelClicked(),
-                child: Text(
-                  widget
-                      .pageReportMode.localizationOptions.pageReportModeCancel,
-                ),
+                child: Text(widget
+                    .pageReportMode.localizationOptions.pageReportModeCancel),
               ),
             ],
           )
@@ -158,17 +147,7 @@ class PageWidgetState extends State<PageWidget> {
 
   Widget _getStackTraceWidget() {
     if (widget.pageReportMode.showStackTrace) {
-      String error = "";
-      if (widget.report.error != null) {
-        error = widget.report.error.toString();
-      } else if (widget.report.errorDetails != null) {
-        error = widget.report.errorDetails.toString();
-      }
-
-      final List<String> items = [
-        error,
-        ...widget.report.stackTrace.toString().split("\n"),
-      ];
+      final items = widget.report.stackTrace.toString().split("\n");
       return SizedBox(
         height: 300.0,
         child: ListView.builder(

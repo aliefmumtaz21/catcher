@@ -1,16 +1,15 @@
-import 'dart:io';
-
 import 'package:catcher/model/platform_type.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Report {
-  /// Error that has been caught
+  /// Error that has been catched
   final dynamic error;
 
   /// Stack trace of error
   final dynamic stackTrace;
 
-  /// Time when it was caught
+  /// Time when it was catched
   final DateTime dateTime;
 
   /// Device info
@@ -28,10 +27,6 @@ class Report {
   /// Type of platform used
   final PlatformType platformType;
 
-  ///Screenshot of screen where error happens. Screenshot won't work everywhere
-  /// (i.e. web platform), so this may be null.
-  final File? screenshot;
-
   /// Creates report instance
   Report(
     this.error,
@@ -42,7 +37,6 @@ class Report {
     this.customParameters,
     this.errorDetails,
     this.platformType,
-    this.screenshot,
   );
 
   /// Creates json from current instance

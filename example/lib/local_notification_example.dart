@@ -1,6 +1,10 @@
 import 'package:catcher/catcher.dart';
+import 'package:catcher/mode/report_mode_action_confirmed.dart';
 import 'package:catcher/model/platform_type.dart';
+import 'package:catcher/model/report.dart';
+import 'package:catcher/model/report_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
@@ -107,8 +111,7 @@ class NotificationReportMode extends ReportMode {
 
   void _sendNotification() async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        channelId, channelName,
-        channelDescription: channelDescription,
+        channelId, channelName, channelDescription,
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority);
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();

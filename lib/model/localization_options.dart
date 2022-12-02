@@ -14,7 +14,6 @@ class LocalizationOptions {
   final String pageReportModeCancel;
 
   final String toastHandlerDescription;
-  final String snackbarHandlerDescription;
 
   LocalizationOptions(
     this.languageCode, {
@@ -32,7 +31,6 @@ class LocalizationOptions {
     this.pageReportModeAccept = "Accept",
     this.pageReportModeCancel = "Cancel",
     this.toastHandlerDescription = "Error occurred:",
-    this.snackbarHandlerDescription = "Error occurred:",
   });
 
   static LocalizationOptions buildDefaultEnglishOptions() {
@@ -44,18 +42,17 @@ class LocalizationOptions {
       "zh",
       notificationReportModeTitle: "发生应用错误",
       notificationReportModeContent: "单击此处将错误报告发送给支持团队。",
-      dialogReportModeTitle: "错误",
+      dialogReportModeTitle: "紧急",
       dialogReportModeDescription:
           "应用程序中发生意外错误。 错误报告已准备好发送给支持团队。 请单击“接受”以发送错误报告，或单击“取消”以关闭报告。",
       dialogReportModeAccept: "接受",
       dialogReportModeCancel: "取消",
-      pageReportModeTitle: "错误",
+      pageReportModeTitle: "紧急",
       pageReportModeDescription:
           "应用程序中发生意外错误。 错误报告已准备好发送给支持团队。 请单击“接受”以发送错误报告，或单击“取消”以关闭报告。",
       pageReportModeAccept: "接受",
       pageReportModeCancel: "取消",
-      toastHandlerDescription: "发生了错误:",
-      snackbarHandlerDescription: "发生了错误:",
+      toastHandlerDescription: "發生了錯誤:",
     );
   }
 
@@ -76,7 +73,6 @@ class LocalizationOptions {
       pageReportModeAccept: "स्वीकार करना",
       pageReportModeCancel: "रद्द करना",
       toastHandlerDescription: "त्रुटि हुई:",
-      snackbarHandlerDescription: "त्रुटि हुई:",
     );
   }
 
@@ -97,7 +93,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Aceptar",
       pageReportModeCancel: "Cancelar",
       toastHandlerDescription: "Se produjo un error:",
-      snackbarHandlerDescription: "Se produjo un error:",
     );
   }
 
@@ -118,7 +113,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Terima",
       pageReportModeCancel: "Batalkan",
       toastHandlerDescription: "Ralat berlaku:",
-      snackbarHandlerDescription: "Ralat berlaku:",
     );
   }
 
@@ -139,7 +133,6 @@ class LocalizationOptions {
       pageReportModeAccept: "принимать",
       pageReportModeCancel: "отменить",
       toastHandlerDescription: "Произошла ошибка:",
-      snackbarHandlerDescription: "Произошла ошибка:",
     );
   }
 
@@ -160,7 +153,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Aceitar",
       pageReportModeCancel: "Cancelar",
       toastHandlerDescription: "Ocorreu um erro:",
-      snackbarHandlerDescription: "Ocorreu um erro:",
     );
   }
 
@@ -181,7 +173,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Acceptez",
       pageReportModeCancel: "Annuler",
       toastHandlerDescription: "Erreur est survenue:",
-      snackbarHandlerDescription: "Erreur est survenue:",
     );
   }
 
@@ -202,7 +193,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Akceptuj",
       pageReportModeCancel: "Odrzuć",
       toastHandlerDescription: "Wystąpił błąd:",
-      snackbarHandlerDescription: "Wystąpił błąd:",
     );
   }
 
@@ -223,7 +213,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Accetta",
       pageReportModeCancel: "Annulla",
       toastHandlerDescription: "Errore:",
-      snackbarHandlerDescription: "Errore:",
     );
   }
 
@@ -243,7 +232,6 @@ class LocalizationOptions {
       pageReportModeAccept: "수락",
       pageReportModeCancel: "취소",
       toastHandlerDescription: "오류가 발생했습니다:",
-      snackbarHandlerDescription: "오류가 발생했습니다:",
     );
   }
 
@@ -264,71 +252,6 @@ class LocalizationOptions {
       pageReportModeAccept: "Accepteer",
       pageReportModeCancel: "Annuleer",
       toastHandlerDescription: "Der er sket en fejl:",
-      snackbarHandlerDescription: "Der er sket en fejl:",
-    );
-  }
-
-  static LocalizationOptions buildDefaultGermanOptions() {
-    return LocalizationOptions(
-      "de",
-      notificationReportModeTitle: "Ein Anwendungsfehler ist aufgetreten",
-      notificationReportModeContent:
-          "Klicken Sie hier, um einen Fehlerbericht an das Support-Team zu senden.",
-      dialogReportModeTitle: "Absturz",
-      dialogReportModeDescription:
-          "Unerwarteter Fehler in der Anwendung aufgetreten. Der Fehlerbericht ist bereit zum Senden an das Support-Team. Bitte klicken Sie auf Akzeptieren, um den Fehlerbericht zu senden, oder auf Abbrechen, um den Bericht zu verwerfen.",
-      dialogReportModeAccept: "Akzeptieren",
-      dialogReportModeCancel: "Abbrechen",
-      pageReportModeTitle: "Absturz",
-      pageReportModeDescription:
-          "Unerwarteter Fehler in der Anwendung aufgetreten. Der Fehlerbericht ist bereit zum Senden an das Support-Team. Bitte klicken Sie auf Akzeptieren, um den Fehlerbericht zu senden, oder auf Abbrechen, um den Bericht zu verwerfen.",
-      pageReportModeAccept: "Akzeptieren",
-      pageReportModeCancel: "Abbrechen",
-      toastHandlerDescription: "Es ist ein Fehler aufgetreten:",
-      snackbarHandlerDescription: "Es ist ein Fehler aufgetreten:",
-    );
-  }
-
-  ///Helper method used to copy values of current LocalizationOptions with new
-  ///values passed in method.
-  LocalizationOptions copyWith({
-    String? languageCode,
-    String? notificationReportModeTitle,
-    String? notificationReportModeContent,
-    String? dialogReportModeTitle,
-    String? dialogReportModeDescription,
-    String? dialogReportModeAccept,
-    String? dialogReportModeCancel,
-    String? pageReportModeTitle,
-    String? pageReportModeDescription,
-    String? pageReportModeAccept,
-    String? pageReportModeCancel,
-    String? toastHandlerDescription,
-    String? snackbarHandlerDescription,
-  }) {
-    return LocalizationOptions(
-      languageCode ?? this.languageCode,
-      notificationReportModeTitle:
-          notificationReportModeTitle ?? this.notificationReportModeTitle,
-      notificationReportModeContent:
-          notificationReportModeContent ?? this.notificationReportModeContent,
-      dialogReportModeTitle:
-          dialogReportModeTitle ?? this.dialogReportModeTitle,
-      dialogReportModeDescription:
-          dialogReportModeDescription ?? this.dialogReportModeDescription,
-      dialogReportModeAccept:
-          dialogReportModeAccept ?? this.dialogReportModeAccept,
-      dialogReportModeCancel:
-          dialogReportModeCancel ?? this.dialogReportModeCancel,
-      pageReportModeTitle: pageReportModeTitle ?? this.pageReportModeTitle,
-      pageReportModeDescription:
-          pageReportModeDescription ?? this.pageReportModeDescription,
-      pageReportModeAccept: pageReportModeAccept ?? this.pageReportModeAccept,
-      pageReportModeCancel: pageReportModeCancel ?? this.pageReportModeCancel,
-      toastHandlerDescription:
-          toastHandlerDescription ?? this.toastHandlerDescription,
-      snackbarHandlerDescription:
-          snackbarHandlerDescription ?? this.snackbarHandlerDescription,
     );
   }
 }

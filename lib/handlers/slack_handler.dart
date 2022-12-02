@@ -1,15 +1,13 @@
-import 'dart:async';
-
 import 'package:catcher/model/platform_type.dart';
 import 'package:catcher/model/report.dart';
 import 'package:catcher/model/report_handler.dart';
 import 'package:catcher/utils/catcher_utils.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
-//Slack webhook API doesn't allow file attachments
 class SlackHandler extends ReportHandler {
   final Dio _dio = Dio();
+  final Logger _logger = Logger("SlackHandler");
 
   final String webhookUrl;
   final String channel;
@@ -21,35 +19,25 @@ class SlackHandler extends ReportHandler {
   final bool enableApplicationParameters;
   final bool enableStackTrace;
   final bool enableCustomParameters;
-  final FutureOr<String> Function(Report report)? customMessageBuilder;
 
-  SlackHandler(
-    this.webhookUrl,
-    this.channel, {
-    this.username = "Catcher",
-    this.iconEmoji = ":bangbang:",
-    this.printLogs = false,
-    this.enableDeviceParameters = false,
-    this.enableApplicationParameters = false,
-    this.enableStackTrace = false,
-    this.enableCustomParameters = false,
-    this.customMessageBuilder,
-  });
+  SlackHandler(this.webhookUrl, this.channel,
+      {this.username = "Catcher",
+      this.iconEmoji = ":bangbang:",
+      this.printLogs = false,
+      this.enableDeviceParameters = false,
+      this.enableApplicationParameters = false,
+      this.enableStackTrace = false,
+      this.enableCustomParameters = false});
 
   @override
-  Future<bool> handle(Report report, BuildContext? context) async {
+  Future<bool> handle(Report report) async {
     try {
       if (!(await CatcherUtils.isInternetConnectionAvailable())) {
         _printLog("No internet connection available");
         return false;
       }
-      String message = "";
-      if (customMessageBuilder != null) {
-        message = await customMessageBuilder!(report);
-      } else {
-        message = _buildMessage(report);
-      }
 
+      final String message = _buildMessage(report);
       final data = {
         "text": message,
         "channel": channel,
@@ -60,8 +48,7 @@ class SlackHandler extends ReportHandler {
       final Response response =
           await _dio.post<dynamic>(webhookUrl, data: data);
       _printLog(
-        "Server responded with code: ${response.statusCode} and message: ${response.statusMessage}",
-      );
+          "Server responded with code: ${response.statusCode} and message: ${response.statusMessage}");
       final statusCode = response.statusCode ?? 0;
       return statusCode >= 200 && statusCode < 300;
     } catch (exception) {
@@ -105,17 +92,11 @@ class SlackHandler extends ReportHandler {
 
   void _printLog(String log) {
     if (printLogs) {
-      logger.info(log);
+      _logger.info(log);
     }
   }
 
   @override
-  List<PlatformType> getSupportedPlatforms() => [
-        PlatformType.android,
-        PlatformType.iOS,
-        PlatformType.web,
-        PlatformType.linux,
-        PlatformType.macOS,
-        PlatformType.windows,
-      ];
+  List<PlatformType> getSupportedPlatforms() =>
+      [PlatformType.android, PlatformType.iOS];
 }
